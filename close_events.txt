@@ -1,0 +1,18 @@
+#!/bin/bash
+
+read -p "Enter Incident Number: " INCIDENT
+
+STATUS=$(grep "^$INCIDENT" ticket_status.txt | awk '{print $2}')
+EVENT_ID=$(grep "^$INCIDENT" events_tickets.txt | awk '{print $2}')
+
+if [[ -z "$STATUS" || -z "$EVENT_ID" ]]; then
+    echo "Incident not found."
+    exit 1
+fi
+
+if [[ "$STATUS" == "closed" ]]; then
+    echo "$EVENT_ID closed" >> events_status.txt
+    echo "Event $EVENT_ID is now CLOSED."
+else
+    echo "Event $EVENT_ID is still OPEN."
+fi
